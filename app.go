@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"log"
+	ymuwutil "password-manager/ymuw-util"
+	"path"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -36,7 +38,8 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	dbPath := path.Join(ymuwutil.GetConfigDir(), "pwmng.db")
+	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
@@ -67,4 +70,25 @@ func (a *App) AddPassword(placeID uint, name string, password string) string {
 		return result.Error.Error()
 	}
 	return "success"
+}
+
+func (a *App) GetPlaceInfoList() []PlaceInfo {
+	var placeInfos []PlaceInfo
+	err := a.db.Find(&placeInfos).Error
+	if err != nil {
+		log.Println(err.Error())
+		return nil
+	}
+
+	return placeInfos
+}
+
+func (a *App) GetPlacePasswords(id uint) PlaceInfo {
+	var placeInfo PlaceInfo
+	err := a.db.Model(&PlaceInfo{}).Preload("Passwords").Where("id = ?", id).First(&placeInfo).Error
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	return placeInfo
 }
