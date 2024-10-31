@@ -9,14 +9,21 @@
     "preview": "vite preview",
     "lint:check": "biome lint ./",
     "format:check": "biome format ./",
-    "lint:fix": "biome format --write ./ && biome lint --apply ./"
+    "lint:fix": "biome format --write ./ && biome lint --write ./"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.2.4",
+    "@chakra-ui/react": "^2.10.1",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "framer-motion": "^11.11.1",
+    "jotai": "^2.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.3",
+    "@swc-jotai/react-refresh": "^0.2.0",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
